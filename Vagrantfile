@@ -60,4 +60,23 @@ Vagrant.configure("2") do |config|
     ansible.vm.provision "shell", inline: "ansible-playbook -i /vagrant/configs/ansible/hosts /vagrant/configs/ansible/playbook.yml"
   end
 
+  config.vm.define "memcached" do |memcached|
+    memcached.vm.box = "centos/7"
+    memcached.vm.provider "virtualbox" do |vb|
+      vb.memory = 512
+      vb.cpus = 1
+      vb.name = "centos_memcached"
+    end
+  end
+
+  config.vm.define "dockerhost" do |dockerhost|
+    dockerhost.vm.provider "virtualbox" do |vb|
+      vb.memory = 512
+      vb.cpus = 1
+      vb.name = "ubuntu_docker"
+    end
+
+    dockerhost.vm.provision "shell", inline: "apt-get update && apt-get install -y docker.io"
+  end
+
 end
