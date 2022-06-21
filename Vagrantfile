@@ -26,7 +26,8 @@ Vagrant.configure("2") do |config|
   config.vm.define "web" do |web|
     web.vm.network "forwarded_port", guest: 8888, host:8888
     web.vm.network "public_network", ip: "192.168.1.25"
-    
+    web.vm.synced_folder "simulator", "/home/vagrant/simulator"
+
     config.vm.provider "virtualbox" do |vb|
       vb.memory = 1024
       vb.cpus = 2
@@ -35,10 +36,10 @@ Vagrant.configure("2") do |config|
 
     web.vm.provision "shell", inline: "apt-get update && apt-get install -y puppet"
     
-    web.vm.provision "puppet" do |puppet|
-      puppet.manifests_path = "./configs/manifests"
-      puppet.manifests_file = "web.pp"
-    end
+    # web.vm.provision "puppet" do |puppet|
+    #   puppet.manifests_path = "./configs/manifests"
+    #   puppet.manifests_file = "web.pp"
+    # end
 
   end
 
