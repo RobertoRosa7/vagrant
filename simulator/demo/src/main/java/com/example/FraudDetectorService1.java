@@ -2,13 +2,13 @@ package com.example;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-public class FraudDetectorService {
+public class FraudDetectorService1 {
   private final String topic = "ECOMMERCE_NEW_ORDER";
 
   public static void main(String[] args) {
-    var fraudDetectorService = new FraudDetectorService();
-    try (var service = new KafkaService(FraudDetectorService.class.getSimpleName(), fraudDetectorService.topic,
-        fraudDetectorService::parser)) {
+    var fraudDetectorService1 = new FraudDetectorService1();
+    try (var service = new KafkaService(FraudDetectorService1.class.getSimpleName(), fraudDetectorService1.topic,
+        fraudDetectorService1::parser)) {
       service.run();
     }
   }

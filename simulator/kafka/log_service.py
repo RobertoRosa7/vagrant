@@ -1,13 +1,17 @@
+import os
+import re
+import sys
 
-from simulator.kafka.kafka_service import KafkaService
+sys.path.append(os.path.abspath(os.getcwd()))
+from kafka_service import KafkaService
 
 
-class FraudDetectorService:
-  topics = ('ECOMMERCE_NEW_ORDER')
-
+class LogService:
+  topics = ()
+  
   def __init__(self):
+    service = KafkaService(LogService.__name__, self.topics, self.parser, re.compile("ECOMMERCE.*"))
     try:
-      service = KafkaService(FraudDetectorService.__name__, self.topics, self.parser)
       service.run()
     except Exception as e:
       service.close(e)
@@ -15,11 +19,11 @@ class FraudDetectorService:
 
   def parser(self, record):
       print("-----------------------------------------");
-      print("Processing new order, checking for fraud");
+      print("LOG => {}".format(record.topic));
       print("Key => {}".format(record.key.decode('utf-8')));
       print("Value => {}".format(record.value.decode('utf-8')));
       print("Partition => {}".format(record.partition));
       print("Offset => {}".format(record.offset));
       print("Order proccessed\n");
 
-FraudDetectorService()
+LogService()
