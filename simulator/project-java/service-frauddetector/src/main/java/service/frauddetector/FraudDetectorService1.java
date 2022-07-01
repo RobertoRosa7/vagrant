@@ -7,7 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import common.kafka.GsonDeserializer;
 import common.kafka.KafkaService;
-import com.example.Order;
+import service.frauddetector.Order;
 
 public class FraudDetectorService1 {
   private final String topic = "ECOMMERCE_NEW_ORDER";

@@ -4,9 +4,7 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
-
-import com.example.Order;
-
+import service.frauddetector.Order;
 import common.kafka.GsonDeserializer;
 import common.kafka.KafkaService;
 

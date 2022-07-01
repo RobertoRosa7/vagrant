@@ -1,2 +1,3 @@
 service/frauddetector/FraudDetectorService1.class
 service/frauddetector/FraudDetectorService.class
+service/frauddetector/Order.class

@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
-import com.example.Order;
-
 import common.kafka.Email;
 import common.kafka.KafkaDispatcher;
 
