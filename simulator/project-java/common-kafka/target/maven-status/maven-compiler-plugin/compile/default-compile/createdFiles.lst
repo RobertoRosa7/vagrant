@@ -1,0 +1,6 @@
+common/kafka/KafkaDispatcher.class
+common/kafka/GsonDeserializer.class
+common/kafka/GsonSerializer.class
+common/kafka/KafkaService.class
+common/kafka/ConsumerFunction.class
+common/kafka/Email.class
