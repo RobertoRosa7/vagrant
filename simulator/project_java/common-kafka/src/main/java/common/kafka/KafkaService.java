@@ -37,9 +37,10 @@ public class KafkaService<T> implements Closeable {
   public void run() {
     while (true) {
       var records = this.consumer.poll(Duration.ofMillis(100));
-
       if (!records.isEmpty()) {
+
         System.out.println("Encontrei " + records.count() + " registros");
+
         for (var record : records) {
           try {
             this.parser.consume(record);
@@ -48,6 +49,7 @@ public class KafkaService<T> implements Closeable {
             // i want to recover and parse the next one
             // so far, just logging the execption for this message
             e.printStackTrace();
+          }
         }
       }
     }

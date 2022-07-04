@@ -41,13 +41,14 @@ public class FraudDetectorService1 {
 
     var order = record.value();
 
-    if (this.isFraud(order)) {
-      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getUserId(), order);
+    if (isFraud(order)) {
+      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getEmail(), order);
       System.out.println("Order is a Fraud!!!!! => " + order.getAmount());
     } else {
-      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getUserId(), order);
+      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getEmail(), order);
       System.out.println("Order APRROVED =>  " + order.getAmount());
     }
+  }
 
   // pretending that the fraud happens when the amount is >= 4500
   private boolean isFraud(Order order) {

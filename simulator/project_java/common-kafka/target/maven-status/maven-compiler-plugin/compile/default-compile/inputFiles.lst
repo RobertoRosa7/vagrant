@@ -1,6 +1,6 @@
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/ConsumerFunction.java
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/KafkaService.java
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/GsonDeserializer.java
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/KafkaDispatcher.java
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/Email.java
-/home/vagrant/simulator/project-java/common-kafka/src/main/java/common/kafka/GsonSerializer.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/KafkaService.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/ConsumerFunction.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/KafkaDispatcher.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/GsonSerializer.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/Email.java
+/home/vagrant/simulator/project_java/common-kafka/src/main/java/common/kafka/GsonDeserializer.java

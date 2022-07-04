@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -16,9 +17,14 @@ public class CreateUserService {
   CreateUserService() throws SQLException {
     String url = "jdbc:sqlite:target/user_database.db";
     this.connection = DriverManager.getConnection(url);
-    this.connection.createStatement().execute("create table Users (" +
-        "uuid varchar(200) primary key," +
-        "email varchar(200))");
+    try {
+      this.connection.createStatement().execute("create table Users (" +
+          "uuid varchar(200) primary key," +
+          "email varchar(200))");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+
   }
 
   public static void main(String[] args) throws SQLException {
@@ -41,7 +47,7 @@ public class CreateUserService {
 
     var order = record.value();
     if (this.isNewUser(order.getEmail())) {
-      this.inserNewUser(order.getEmail());
+      this.insertNewUser(order.getEmail());
     }
   }
 
@@ -53,9 +59,9 @@ public class CreateUserService {
     return results.next();
   }
 
-  private void inserNewUser(String email) throws SQLException {
+  private void insertNewUser(String email) throws SQLException {
     var insert = this.connection.prepareStatement("insert into Users (uuid, email) values (?, ?)");
-    insert.setString(1, "uuid");
+    insert.setString(1, UUID.randomUUID().toString());
     insert.setString(2, email);
     insert.execute();
     System.out.println("User uuid e " + email + "added");

@@ -15,7 +15,7 @@ public class FraudDetectorService {
 
   public static void main(String[] args) {
     var fraud = new FraudDetectorService();
-    
+
     try (var service = new KafkaService<>(
         FraudDetectorService.class.getSimpleName(),
         fraud.topic,
@@ -42,11 +42,11 @@ public class FraudDetectorService {
 
     var order = record.value();
 
-    if (this.isFraud(order)) {
-      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getUserId(), order);
+    if (isFraud(order)) {
+      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getEmail(), order);
       System.out.println("Order is a Fraud!!!!! => " + order.getAmount());
     } else {
-      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getUserId(), order);
+      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getEmail(), order);
       System.out.println("Order APRROVED =>  " + order.getAmount());
     }
 
