@@ -24,9 +24,10 @@ Vagrant.configure("2") do |config|
   # end
 
   config.vm.define "web" do |web|
-    web.vm.network "forwarded_port", guest: 8888, host:8888
-    web.vm.network "forwarded_port", guest: 2181, host:2181
-    web.vm.network "forwarded_port", guest: 9092, host:9092
+    web.vm.network "forwarded_port", guest: 8888, host:8888 # Web Server
+    web.vm.network "forwarded_port", guest: 8080, host:8080 # API Server
+    web.vm.network "forwarded_port", guest: 2181, host:2181 # Zookeeper
+    web.vm.network "forwarded_port", guest: 9092, host:9092 # Kafka
     web.vm.network "public_network", ip: "192.168.1.25"
     web.vm.synced_folder "simulator", "/home/vagrant/simulator"
 
