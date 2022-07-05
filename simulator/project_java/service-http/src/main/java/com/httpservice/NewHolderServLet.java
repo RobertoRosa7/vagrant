@@ -1,7 +1,7 @@
 package com.httpservice;
 
+import java.io.IOException;
 import java.math.BigDecimal;
-import java.rmi.ServerException;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -14,27 +14,39 @@ import common.kafka.Email;
 import common.kafka.KafkaDispatcher;
 
 public class NewHolderServLet extends HttpServlet {
+  private final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
+  private final KafkaDispatcher<Email> emailDispatcher = new KafkaDispatcher<>();
+
+  @Override
+  public void destroy() {
+    super.destroy();
+    this.orderDispatcher.close();
+    this.emailDispatcher.close();
+  }
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
-    try (var orderDispatcher = new KafkaDispatcher<Order>()) {
-      try (var emailDispatcher = new KafkaDispatcher<Email>()) {
-        try {
-          var userEmail = "user" + NewHolderServLet.getRandomIntNumber(1, 6000) + "@gmail.com";
-          var orderId = UUID.randomUUID().toString();
-          var amount = new BigDecimal(Math.random() * 5000 + 1);
+    try {
+      var email = req.getParameter("email");
+      var amount = new BigDecimal(req.getParameter("amount"));
+      var orderId = UUID.randomUUID().toString();
 
-          var order = new Order(orderId, amount, userEmail);
-          var email = new Email("Novo Membro", "Seja Bem vindo");
+      var newOrder = new Order(orderId, amount, email);
+      var newEmail = new Email("Novo Membro", "Seja Bem vindo");
 
-          orderDispatcher.send("ECOMMERCE_NEW_ORDER", userEmail, order);
-          emailDispatcher.send("ECOMMERCE_SEND_EMAIL", userEmail, email);
-        } catch (ExecutionException e) {
-          throw new ServletException(e);
-        } catch (InterruptedException e) {
-          throw new ServletException(e);
-        }
-      }
+      this.orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, newOrder);
+      this.emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, newEmail);
+
+      System.out.println("New order sent successfully.");
+      resp.setStatus(HttpServletResponse.SC_OK);
+      resp.getWriter().println("New order was sent");
+
+    } catch (ExecutionException e) {
+      throw new ServletException(e);
+    } catch (InterruptedException e) {
+      throw new ServletException(e);
+    } catch (IOException e) {
+      throw new ServletException(e);
     }
   }
 
