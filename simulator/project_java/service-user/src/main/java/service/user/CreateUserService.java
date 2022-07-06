@@ -9,12 +9,13 @@ import java.util.UUID;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import common.kafka.KafkaService;
+import common.kafka.Message;
 
 public class CreateUserService {
   private final String topic = "ECOMMERCE_NEW_ORDER";
   private final Connection connection;
 
-  CreateUserService() throws SQLException {
+  public CreateUserService() throws SQLException {
     String url = "jdbc:sqlite:target/user_database.db";
     this.connection = DriverManager.getConnection(url);
     try {
@@ -40,14 +41,15 @@ public class CreateUserService {
     }
   }
 
-  private void parser(ConsumerRecord<String, Order> record) throws SQLException {
+  private void parser(ConsumerRecord<String, Message<Order>> record) throws SQLException {
+    var message = record.value();
+
     System.out.println("-----------------------------------------");
     System.out.println("Processing new order, checking for new user");
     System.out.println("Value => " + record.value());
 
-    var order = record.value();
-    if (this.isNewUser(order.getEmail())) {
-      this.insertNewUser(order.getEmail());
+    if (this.isNewUser(message.getPayload().getEmail())) {
+      this.insertNewUser(message.getPayload().getEmail());
     }
   }
 

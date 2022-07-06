@@ -7,6 +7,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import common.kafka.KafkaService;
+import common.kafka.Message;
 
 public class EmailService {
   private final String topic = "ECOMMERCE_SEND_EMAIL";
@@ -23,13 +24,15 @@ public class EmailService {
     }
   }
 
-  private void parser(ConsumerRecord<String, String> record) {
+  private void parser(ConsumerRecord<String, Message<String>> record) {
+    var message = record.value();
+
     System.out.println("-----------------------------------------");
     System.out.println("Sending email");
-    System.out.println("Key " + record.key());
-    System.out.println("Value " + record.value());
-    System.out.println("Partition " + record.partition());
-    System.out.println("Offset " + record.offset());
+    System.out.println("Key => " + record.key());
+    System.out.println("Value =>" + message.getPayload());
+    System.out.println("Partition =>" + record.partition());
+    System.out.println("Offset =>" + record.offset());
 
     try {
       Thread.sleep(1000);

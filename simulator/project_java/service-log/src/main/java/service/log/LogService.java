@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
 import common.kafka.KafkaService;
+import common.kafka.Message;
 
 public class LogService {
   public static void main(String[] args) {
@@ -21,13 +22,14 @@ public class LogService {
     }
   }
 
-  private void parser(ConsumerRecord<String, String> record) {
+  private void parser(ConsumerRecord<String, Message<String>> record) {
+    var message = record.value();
     System.out.println("-----------------------------------------");
-    System.out.println("LOG: " + record.topic());
-    System.out.println("Key " + record.key());
-    System.out.println("Value " + record.value());
-    System.out.println("Partition " + record.partition());
-    System.out.println("Offset " + record.offset());
+    System.out.println("LOG => " + record.topic());
+    System.out.println("Key => " + record.key());
+    System.out.println("Value => " + message.getPayload());
+    System.out.println("Partition =>" + record.partition());
+    System.out.println("Offset =>" + record.offset());
 
     try {
       Thread.sleep(1000);

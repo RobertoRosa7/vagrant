@@ -8,6 +8,7 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 import common.kafka.KafkaDispatcher;
 import common.kafka.KafkaService;
+import common.kafka.Message;
 
 public class FraudDetectorService {
   private final String topic = "ECOMMERCE_NEW_ORDER";
@@ -26,11 +27,12 @@ public class FraudDetectorService {
     }
   }
 
-  private void parser(ConsumerRecord<String, Order> record) throws InterruptedException, ExecutionException {
+  private void parser(ConsumerRecord<String, Message<Order>> record) throws InterruptedException, ExecutionException {
+    var message = record.value();
     System.out.println("-----------------------------------------");
     System.out.println("Processing new order, checking for fraud");
     System.out.println("Key => " + record.key());
-    System.out.println("Value => " + record.value());
+    System.out.println("Value => " + message.getPayload());
     System.out.println("Partition => " + record.partition());
     System.out.println("Offset => " + record.offset());
 
@@ -40,7 +42,7 @@ public class FraudDetectorService {
       e.printStackTrace();
     }
 
-    var order = record.value();
+    var order = message.getPayload();
 
     if (isFraud(order)) {
       dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getEmail(), order);

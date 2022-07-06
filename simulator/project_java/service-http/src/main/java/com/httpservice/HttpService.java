@@ -12,6 +12,7 @@ public class HttpService {
 
     context.setContextPath("/");
     context.addServlet(new ServletHolder(new NewHolderServLet()), "/new");
+    context.addServlet(new ServletHolder(new GenerateAllReportsServLet()), "/admin/generate-reports");
     server.setHandler(context);
 
     server.start();

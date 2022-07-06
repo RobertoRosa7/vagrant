@@ -12,14 +12,16 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 public class KafkaDispatcher<T> implements Closeable {
-  private final KafkaProducer<String, T> producer;
+  private final KafkaProducer<String, Message<T>> producer;
 
   public KafkaDispatcher() {
     this.producer = new KafkaProducer<>(properties());
   }
 
-  public void send(String topic, String key, T value) throws InterruptedException, ExecutionException {
+  public void send(String topic, String key, T payload) throws InterruptedException, ExecutionException {
+    var value = new Message<>(new CorrelationId(), payload);
     var record = new ProducerRecord<>(topic, key, value);
+
     Callback callback = (RecordMetadata metadata, Exception e) -> {
       if (e != null) {
         e.printStackTrace();
@@ -44,7 +46,7 @@ public class KafkaDispatcher<T> implements Closeable {
     properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "192.168.1.25:9092");
     properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, GsonSerializer.class.getName());
-    properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
+    // properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
     return properties;
   }
 }
