@@ -1,3 +1,4 @@
+com/httpservice/Order.class
+com/httpservice/GenerateAllReportsServLet.class
 com/httpservice/NewHolderServLet.class
 com/httpservice/HttpService.class
-com/httpservice/Order.class

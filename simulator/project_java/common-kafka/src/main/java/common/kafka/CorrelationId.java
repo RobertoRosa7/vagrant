@@ -11,8 +11,6 @@ public class CorrelationId {
 
   @Override
   public String toString() {
-    return "CorrelationId{" +
-        "id='" + this.id + '\'' +
-        '}';
+    return "CorrelationId{" + "id='" + this.id + '\'' + '}';
   }
 }

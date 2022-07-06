@@ -25,11 +25,11 @@ public class LogService {
   private void parser(ConsumerRecord<String, Message<String>> record) {
     var message = record.value();
     System.out.println("-----------------------------------------");
-    System.out.println("LOG => " + record.topic());
-    System.out.println("Key => " + record.key());
+    // System.out.println("LOG => " + record.topic());
+    // System.out.println("Key => " + record.key());
     System.out.println("Value => " + message.getPayload());
-    System.out.println("Partition =>" + record.partition());
-    System.out.println("Offset =>" + record.offset());
+    // System.out.println("Partition =>" + record.partition());
+    // System.out.println("Offset =>" + record.offset());
 
     try {
       Thread.sleep(1000);

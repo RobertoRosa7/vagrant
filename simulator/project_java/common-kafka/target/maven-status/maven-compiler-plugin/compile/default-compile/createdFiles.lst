@@ -1,6 +1,9 @@
 common/kafka/KafkaDispatcher.class
-common/kafka/GsonDeserializer.class
+common/kafka/CorrelationId.class
 common/kafka/GsonSerializer.class
+common/kafka/GsonDeserializer.class
 common/kafka/KafkaService.class
+common/kafka/Message.class
 common/kafka/ConsumerFunction.class
+common/kafka/MessageAdapter.class
 common/kafka/Email.class

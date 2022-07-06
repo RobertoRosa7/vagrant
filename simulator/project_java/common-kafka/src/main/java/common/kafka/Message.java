@@ -11,9 +11,7 @@ public class Message<T> {
 
   @Override
   public String toString() {
-    return "Message{" +
-        "id=" + this.id +
-        ", payload=" + this.payload + '}';
+    return "Message{" + "id='" + this.id + '\'' + ", payload='" + this.payload + '\'' + '}';
   }
 
   public T getPayload() {

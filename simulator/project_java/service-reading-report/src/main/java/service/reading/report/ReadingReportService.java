@@ -30,8 +30,7 @@ public class ReadingReportService {
   private void parser(ConsumerRecord<String, Message<User>> record) throws IOException {
     var message = record.value();
     System.out.println("-----------------------------------------");
-    System.out.println("Processing new report, checking for reportService");
-    System.out.println("Value => " + message.getPayload());
+    System.out.println("Processing new report for " + record.value());
 
     var user = message.getPayload();
     var target = new File(user.getReportPath());
