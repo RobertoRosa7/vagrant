@@ -24,6 +24,9 @@ Vagrant.configure("2") do |config|
   # end
 
   config.vm.define "web" do |web|
+    web.vm.network "forwarded_port", guest: 80, host:80 # Apache
+    web.vm.network "forwarded_port", guest: 443, host:443 # Web Server Security
+    web.vm.network "forwarded_port", guest: 3306, host:3306 # MySQL
     web.vm.network "forwarded_port", guest: 8888, host:8888 # Web Server
     web.vm.network "forwarded_port", guest: 8080, host:8080 # API Server
     web.vm.network "forwarded_port", guest: 2181, host:2181 # Zookeeper
