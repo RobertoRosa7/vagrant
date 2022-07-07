@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.kafka.CorrelationId;
 import common.kafka.KafkaDispatcher;
 
 public class GenerateAllReportsServLet extends HttpServlet {
@@ -22,7 +23,8 @@ public class GenerateAllReportsServLet extends HttpServlet {
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException {
     try {
-      batchDispatcher.send("SEND_MESSAGE_TO_ALL_USERS", "USER_GENERATE_READING_REPORT", "USER_GENERATE_READING_REPORT");
+      batchDispatcher.send("ECOMMERCE_SEND_MESSAGE_TO_ALL_USERS", "ECOMMERCE_USER_GENERATE_READING_REPORT",
+          "ECOMMERCE_USER_GENERATE_READING_REPORT", new CorrelationId(GenerateAllReportsServLet.class.getSimpleName()));
 
       resp.setStatus(HttpServletResponse.SC_OK);
       resp.getWriter().println("Report request generate success");

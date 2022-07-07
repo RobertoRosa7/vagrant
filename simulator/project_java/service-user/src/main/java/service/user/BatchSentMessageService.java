@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
@@ -14,7 +15,7 @@ import common.kafka.KafkaService;
 import common.kafka.Message;
 
 public class BatchSentMessageService {
-  private final String topic = "SENT_MESSAGE_TO_ALL_USERS";
+  private final String topic = "ECOMMERCE_SENT_MESSAGE_TO_ALL_USERS";
   private final Connection connection;
   private final KafkaDispatcher<User> userDispatcher = new KafkaDispatcher<>();
 
@@ -31,14 +32,13 @@ public class BatchSentMessageService {
 
   }
 
-  public static void main(String[] args) throws SQLException {
+  public static void main(String[] args) throws InterruptedException, ExecutionException, SQLException {
     var batchService = new BatchSentMessageService();
 
     try (var service = new KafkaService<>(
         BatchSentMessageService.class.getSimpleName(),
         batchService.topic,
         batchService::parser,
-        String.class,
         Map.of())) {
       service.run();
     }
@@ -51,7 +51,8 @@ public class BatchSentMessageService {
     System.out.println("Topic => " + message.getPayload());
 
     for (User user : this.getAllUsers()) {
-      this.userDispatcher.send(message.getPayload(), user.getUserUuid(), user);
+      this.userDispatcher.sendAsync(message.getPayload(), user.getUserUuid(), user,
+          message.getId().continueWith(BatchSentMessageService.class.getSimpleName()));
     }
 
   }

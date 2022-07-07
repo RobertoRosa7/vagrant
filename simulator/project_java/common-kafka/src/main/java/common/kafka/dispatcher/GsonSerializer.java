@@ -1,5 +1,7 @@
-package common.kafka;
+package common.kafka.dispatcher;
 
+import common.kafka.Message;
+import common.kafka.MessageAdapter;
 import org.apache.kafka.common.serialization.Serializer;
 
 import com.google.gson.Gson;

@@ -6,22 +6,22 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import common.kafka.KafkaDispatcher;
-import common.kafka.KafkaService;
+import common.kafka.CorrelationId;
+import common.kafka.dispatcher.KafkaDispatcher;
+import common.kafka.consumer.KafkaService;
 import common.kafka.Message;
 
 public class FraudDetectorService {
   private final String topic = "ECOMMERCE_NEW_ORDER";
   private final KafkaDispatcher<Order> dispatcher = new KafkaDispatcher<>();
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws InterruptedException, ExecutionException{
     var fraud = new FraudDetectorService();
 
     try (var service = new KafkaService<>(
         FraudDetectorService.class.getSimpleName(),
         fraud.topic,
         fraud::parser,
-        Order.class,
         Map.of())) {
       service.run();
     }
@@ -43,12 +43,13 @@ public class FraudDetectorService {
     }
 
     var order = message.getPayload();
+    CorrelationId corrId = message.getId().continueWith(FraudDetectorService.class.getSimpleName());
 
     if (isFraud(order)) {
-      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getEmail(), order);
+      dispatcher.send("ECOMMERCE_ORDER_REJECT", order.getEmail(), order, corrId);
       System.out.println("Order is a Fraud!!!!! => " + order.getAmount());
     } else {
-      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getEmail(), order);
+      dispatcher.send("ECOMMERCE_ORDER_APPROVED", order.getEmail(), order, corrId);
       System.out.println("Order APRROVED =>  " + order.getAmount());
     }
 

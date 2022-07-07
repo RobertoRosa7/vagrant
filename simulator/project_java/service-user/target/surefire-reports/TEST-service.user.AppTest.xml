@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="service.user.AppTest" time="0.235" tests="1" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" name="service.user.AppTest" time="0.171" tests="1" errors="0" skipped="0" failures="0">
   <properties>
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit"/>
     <property name="java.specification.version" value="11"/>
@@ -14,7 +14,7 @@
     <property name="os.name" value="Linux"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="sun.boot.library.path" value="/usr/lib/jvm/java-11-openjdk-amd64/lib"/>
-    <property name="sun.java.command" value="/home/vagrant/simulator/project_java/service-user/target/surefire/surefirebooter9848426629007766477.jar /home/vagrant/simulator/project_java/service-user/target/surefire 2022-07-04T18-37-43_158-jvmRun1 surefire9519343708236057612tmp surefire_010610190312063309823tmp"/>
+    <property name="sun.java.command" value="/home/vagrant/simulator/project_java/service-user/target/surefire/surefirebooter8663214089275395602.jar /home/vagrant/simulator/project_java/service-user/target/surefire 2022-07-07T13-23-35_642-jvmRun1 surefire14861862817611689716tmp surefire_013808313180970942664tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="/home/vagrant/simulator/project_java/service-user/target/test-classes:/home/vagrant/simulator/project_java/service-user/target/classes:/home/vagrant/.m2/repository/junit/junit/4.13.2/junit-4.13.2.jar:/home/vagrant/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar:/home/vagrant/.m2/repository/org/xerial/sqlite-jdbc/3.28.0/sqlite-jdbc-3.28.0.jar:/home/vagrant/.m2/repository/common/kafka/common-kafka/1.0-SNAPSHOT/common-kafka-1.0-SNAPSHOT.jar:/home/vagrant/.m2/repository/org/apache/kafka/kafka-clients/3.2.0/kafka-clients-3.2.0.jar:/home/vagrant/.m2/repository/com/github/luben/zstd-jni/1.5.2-1/zstd-jni-1.5.2-1.jar:/home/vagrant/.m2/repository/org/lz4/lz4-java/1.8.0/lz4-java-1.8.0.jar:/home/vagrant/.m2/repository/org/xerial/snappy/snappy-java/1.1.8.4/snappy-java-1.1.8.4.jar:/home/vagrant/.m2/repository/org/slf4j/slf4j-api/1.7.36/slf4j-api-1.7.36.jar:/home/vagrant/.m2/repository/org/slf4j/slf4j-simple/1.7.29/slf4j-simple-1.7.29.jar:/home/vagrant/.m2/repository/com/google/code/gson/gson/2.9.0/gson-2.9.0.jar:"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="/home/vagrant/simulator/project_java/service-user/target/surefire/surefirebooter9848426629007766477.jar"/>
+    <property name="surefire.real.class.path" value="/home/vagrant/simulator/project_java/service-user/target/surefire/surefirebooter8663214089275395602.jar"/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.15+10-Ubuntu-0ubuntu0.18.04.1"/>
     <property name="user.name" value="vagrant"/>
@@ -55,5 +55,5 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="shouldAnswerWithTrue" classname="service.user.AppTest" time="0.012"/>
+  <testcase name="shouldAnswerWithTrue" classname="service.user.AppTest" time="0.008"/>
 </testsuite>

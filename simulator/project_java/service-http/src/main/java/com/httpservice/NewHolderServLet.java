@@ -10,12 +10,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import common.kafka.CorrelationId;
 import common.kafka.Email;
 import common.kafka.KafkaDispatcher;
 
 public class NewHolderServLet extends HttpServlet {
   private final KafkaDispatcher<Order> orderDispatcher = new KafkaDispatcher<>();
-  private final KafkaDispatcher<Email> emailDispatcher = new KafkaDispatcher<>();
+  private final KafkaDispatcher<String> emailDispatcher = new KafkaDispatcher<>();
 
   @Override
   public void destroy() {
@@ -33,9 +34,10 @@ public class NewHolderServLet extends HttpServlet {
 
       var newOrder = new Order(orderId, amount, email);
       var newEmail = new Email("Novo Membro", "Seja Bem vindo");
+      var corrId = new CorrelationId(NewHolderServLet.class.getSimpleName());
 
-      this.orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, newOrder);
-      this.emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, newEmail);
+      this.orderDispatcher.send("ECOMMERCE_NEW_ORDER", email, newOrder, corrId);
+      this.emailDispatcher.send("ECOMMERCE_SEND_EMAIL", email, email, corrId);
 
       System.out.println("New order sent successfully.");
       resp.setStatus(HttpServletResponse.SC_OK);

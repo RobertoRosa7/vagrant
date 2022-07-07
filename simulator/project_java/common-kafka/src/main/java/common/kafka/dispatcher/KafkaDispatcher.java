@@ -1,9 +1,12 @@
-package common.kafka;
+package common.kafka.dispatcher;
 
 import java.io.Closeable;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 
+import common.kafka.CorrelationId;
+import common.kafka.Message;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -18,8 +21,9 @@ public class KafkaDispatcher<T> implements Closeable {
     this.producer = new KafkaProducer<>(properties());
   }
 
-  public void send(String topic, String key, T payload) throws InterruptedException, ExecutionException {
-    var value = new Message<>(new CorrelationId(), payload);
+  public Future<RecordMetadata> sendAsync(String topic, String key, T payload, CorrelationId id)
+      throws InterruptedException, ExecutionException {
+    var value = new Message<>(id.continueWith("_" + topic), payload);
     var record = new ProducerRecord<>(topic, key, value);
 
     Callback callback = (RecordMetadata metadata, Exception e) -> {
@@ -32,8 +36,13 @@ public class KafkaDispatcher<T> implements Closeable {
               metadata.topic() + ":::partition" + metadata.partition() + "/offeset" + metadata.offset() + "/timestamp"
                   + metadata.timestamp());
     };
+    return this.producer.send(record, callback);
+  }
 
-    this.producer.send(record, callback).get();
+  public void send(String topic, String key, T payload, CorrelationId id)
+      throws InterruptedException, ExecutionException {
+    Future<RecordMetadata> future = this.sendAsync(topic, key, payload, id);
+    future.get();
   }
 
   @Override

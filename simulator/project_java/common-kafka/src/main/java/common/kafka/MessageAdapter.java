@@ -25,10 +25,10 @@ public class MessageAdapter<T> implements JsonSerializer<Message<T>>, JsonDeseri
   public Message<T> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext context) {
     var obj = jsonElement.getAsJsonObject();
     var payloadType = obj.get("type").getAsString();
-    CorrelationId correlationId = context.deserialize(obj.get("correlationId"), CorrelationId.class);
+    CorrelationId corrId = context.deserialize(obj.get("correlationId"), CorrelationId.class);
     try {
       var payload = context.deserialize(obj.get("payload"), Class.forName(payloadType));
-      Message<T> message = new Message(correlationId, payload);
+      Message<T> message = new Message(corrId, payload);
       return message;
     } catch (ClassNotFoundException e) {
       throw new JsonParseException(e);

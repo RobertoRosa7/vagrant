@@ -1,5 +1,7 @@
-package common.kafka;
+package common.kafka.consumer;
 
+import common.kafka.Message;
+import common.kafka.MessageAdapter;
 import org.apache.kafka.common.serialization.Deserializer;
 
 import com.google.gson.Gson;

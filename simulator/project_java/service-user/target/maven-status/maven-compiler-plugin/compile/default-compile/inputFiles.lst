@@ -1,2 +1,4 @@
+/home/vagrant/simulator/project_java/service-user/src/main/java/service/user/User.java
 /home/vagrant/simulator/project_java/service-user/src/main/java/service/user/CreateUserService.java
 /home/vagrant/simulator/project_java/service-user/src/main/java/service/user/Order.java
+/home/vagrant/simulator/project_java/service-user/src/main/java/service/user/BatchSentMessageService.java

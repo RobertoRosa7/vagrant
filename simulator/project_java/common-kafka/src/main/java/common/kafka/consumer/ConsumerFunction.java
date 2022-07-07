@@ -1,5 +1,6 @@
-package common.kafka;
+package common.kafka.consumer;
 
+import common.kafka.Message;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
 public interface ConsumerFunction<T> {

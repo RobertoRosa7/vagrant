@@ -1,2 +1,4 @@
+service/user/BatchSentMessageService.class
+service/user/User.class
 service/user/Order.class
 service/user/CreateUserService.class
