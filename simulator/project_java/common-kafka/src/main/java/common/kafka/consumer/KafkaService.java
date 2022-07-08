@@ -1,5 +1,12 @@
 package common.kafka.consumer;
 
+import common.kafka.Message;
+import common.kafka.dispatcher.GsonSerializer;
+import common.kafka.dispatcher.KafkaDispatcher;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.serialization.StringDeserializer;
+
 import java.io.Closeable;
 import java.time.Duration;
 import java.util.Collections;
@@ -9,25 +16,18 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Pattern;
 
-import common.kafka.Message;
-import common.kafka.dispatcher.GsonSerializer;
-import common.kafka.dispatcher.KafkaDispatcher;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
-
 public class KafkaService<T> implements Closeable {
   private final KafkaConsumer<String, Message<T>> consumer;
   private final ConsumerFunction<T> parser;
 
   public KafkaService(String groupId, String topic, ConsumerFunction<T> parser,
-      Map<String, String> properties) {
+                      Map<String, String> properties) {
     this(groupId, parser, properties);
     this.consumer.subscribe(Collections.singletonList(topic));
   }
 
   public KafkaService(String groupId, Pattern pattern, ConsumerFunction<T> parser,
-      Map<String, String> properties) {
+                      Map<String, String> properties) {
     this(groupId, parser, properties);
     this.consumer.subscribe(pattern);
   }
@@ -77,7 +77,7 @@ public class KafkaService<T> implements Closeable {
     properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
     properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
-    // properties.setProperty(GsonDeserializer.TYPE_CONFIG, type.getName());
+    properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "largest");
     properties.putAll(props);
     return properties;
   }

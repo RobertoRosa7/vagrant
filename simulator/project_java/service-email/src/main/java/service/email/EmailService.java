@@ -1,30 +1,27 @@
 package service.email;
 
-import java.util.Map;
-import java.util.concurrent.ExecutionException;
-
+import common.kafka.Message;
+import common.kafka.consumer.ConsumerService;
+import common.kafka.consumer.ServiceRunner;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 
-import common.kafka.consumer.KafkaService;
-import common.kafka.Message;
-
-public class EmailService {
+public class EmailService implements ConsumerService<String> {
   private final String topic = "ECOMMERCE_SEND_EMAIL";
 
-  public static void main(String[] args) throws InterruptedException, ExecutionException{
-    var emailService = new EmailService();
-
-    try (var service = new KafkaService<>(
-        EmailService.class.getSimpleName(),
-        emailService.topic,
-        emailService::parser,
-        Map.of())) {
-      service.run();
-    }
+  public static void main(String[] args) {
+    new ServiceRunner<>(EmailService::new).start(5);
   }
 
-  private void parser(ConsumerRecord<String, Message<String>> record) {
-    var message = record.value();
+  public String getTopic() {
+    return this.topic;
+  }
+
+  public String getConsumerGroup() {
+    return EmailService.class.getSimpleName();
+  }
+
+  public void parser(ConsumerRecord<String, Message<String>> record) {
+    Message<String> message = record.value();
 
     System.out.println("-----------------------------------------");
     System.out.println("Sending email");
@@ -38,6 +35,7 @@ public class EmailService {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+
     System.out.println("Order proccessed");
   }
 }
