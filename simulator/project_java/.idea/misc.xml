@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/service-new-order/pom.xml" />
         <option value="$PROJECT_DIR$/service-frauddetector/pom.xml" />
         <option value="$PROJECT_DIR$/service-email-new-order/pom.xml" />
+        <option value="$PROJECT_DIR$/common-databases/pom.xml" />
       </list>
     </option>
   </component>

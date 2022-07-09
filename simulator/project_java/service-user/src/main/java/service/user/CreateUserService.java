@@ -12,33 +12,17 @@ import org.apache.kafka.clients.consumer.ConsumerRecord;
 import common.kafka.KafkaService;
 import common.kafka.Message;
 
-public class CreateUserService {
+public class CreateUserService implements ConsumerService<Order> {
   private final String topic = "ECOMMERCE_NEW_ORDER";
-  private final Connection connection;
+  private final LocalDatabase database;
 
   public CreateUserService() throws SQLException {
-    String url = "jdbc:sqlite:target/user_database.db";
-    this.connection = DriverManager.getConnection(url);
-    try {
-      this.connection.createStatement().execute("create table Users (" +
-          "uuid varchar(200) primary key," +
-          "email varchar(200))");
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-
+    this.database = new LocalDatabase("user_database");
+    this.database.createIfNotExist("create table Users (" + "uuid varchar(200) primary key," + "email varchar(200))");
   }
 
-  public static void main(String[] args) throws InterruptedException, ExecutionException, SQLException {
-    var user = new CreateUserService();
-
-    try (var service = new KafkaService<>(
-        CreateUserService.class.getSimpleName(),
-        user.topic,
-        user::parser,
-        Map.of())) {
-      service.run();
-    }
+  public static void main(String[] args) {
+    new ServiceRunner<>(CreateUserService::new).start(1);
   }
 
   private void parser(ConsumerRecord<String, Message<Order>> record) throws SQLException {
@@ -53,19 +37,24 @@ public class CreateUserService {
     }
   }
 
-  private boolean isNewUser(String email) throws SQLException {
-    var exists = this.connection.prepareStatement("select uuid from Users where email = ? limit 1");
-    exists.setString(1, email);
-
-    var results = exists.executeQuery();
-    return results.next();
+  public boolean isNewUser(String email) throws SQLException {
+    ResultSet results = this.database.query("select uuid from Users where email = ? limit 1");
+    return !results.next();
   }
 
-  private void insertNewUser(String email) throws SQLException {
-    var insert = this.connection.prepareStatement("insert into Users (uuid, email) values (?, ?)");
-    insert.setString(1, UUID.randomUUID().toString());
-    insert.setString(2, email);
-    insert.execute();
+  public void insertNewUser(String email) throws SQLException {
+    String uuid = UUID.randomUUID().toString();
+    this.database.update("insert into Users (uuid, email) values (?, ?)", uuid, email);
     System.out.println("User uuid e " + email + "added");
+  }
+
+  @override
+  public String getTopic() {
+    return this.topic;
+  }
+
+  @override
+  public String getConsumerGroup() {
+    return CreateUserService.class.getSimpleNam();
   }
 }

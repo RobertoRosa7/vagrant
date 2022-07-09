@@ -4,6 +4,7 @@ import common.kafka.Message;
 import common.kafka.dispatcher.GsonSerializer;
 import common.kafka.dispatcher.KafkaDispatcher;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 
@@ -40,20 +41,19 @@ public class KafkaService<T> implements Closeable {
   public void run() throws InterruptedException, ExecutionException {
     try (var deadLetter = new KafkaDispatcher<>()) {
       while (true) {
-        var records = this.consumer.poll(Duration.ofMillis(100));
+        ConsumerRecords<String, Message<T>> records = this.consumer.poll(Duration.ofMillis(100));
+
         if (!records.isEmpty()) {
-
-          System.out.println("Encontrei " + records.count() + " registros");
-
+          System.out.println("Founded " + records.count() + " registers");
           for (var record : records) {
             try {
               this.parser.consume(record);
             } catch (Exception e) {
               // only catches exception because no matter which Exception
-              // i want to recover and parse the next one
-              // so far, just logging the execption for this message
+              // I want to recover and parse the next one
+              // so far, just logging the exception for this message
               e.printStackTrace();
-              var message = record.value();
+              Message<T> message = record.value();
               deadLetter.send("ECOMMERCE_DEADLETTER", message.getId().toString(),
                   new GsonSerializer().serialize("", message),
                   message.getId().continueWith("DeadLetter"));
@@ -77,7 +77,7 @@ public class KafkaService<T> implements Closeable {
     properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupId);
     properties.setProperty(ConsumerConfig.CLIENT_ID_CONFIG, UUID.randomUUID().toString());
     properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "1");
-    properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "largest");
+    properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
     properties.putAll(props);
     return properties;
   }

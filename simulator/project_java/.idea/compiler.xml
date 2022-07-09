@@ -9,11 +9,19 @@
         <module name="service-log" />
         <module name="service-email-new-order" />
         <module name="common-kafka" />
+        <module name="common-databases" />
         <module name="service-new-order" />
         <module name="service-frauddetector" />
         <module name="demo" />
         <module name="service-email" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="common-databases-bootstrap" target="1.6" />
+      <module name="common-databases-datamodel" target="1.6" />
+      <module name="common-databases-ear" target="1.5" />
+      <module name="common-databases-ejb" target="1.6" />
+      <module name="common-databases-war" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>
